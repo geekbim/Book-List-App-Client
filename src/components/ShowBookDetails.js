@@ -1,56 +1,39 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import '../App.css';
 import axios from 'axios';
 
-class showBookDetails extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      book: {}
-    };
-  }
+function ShowBookDetails(props) {
 
-  componentDidMount() {
-    // console.log("Print id: " + this.props.match.params.id);
+  let history = useHistory()
+
+  const [book, setBook] = useState({})
+
+  useEffect(() => {
     axios
-      .get('http://localhost:8082/api/books/'+this.props.match.params.id)
+      .get('http://localhost:8082/api/books/'+props.match.params.id)
       .then(res => {
-        // console.log("Print-showBookDetails-API-response: " + res.data);
-        this.setState({
-          book: res.data
-        })
+        setBook(res.data)
       })
       .catch(err => {
         console.log("Error from ShowBookDetails");
       })
-  };
+  }, [props])
 
-  onDeleteClick (id) {
+  const onDeleteClick = id => {
     axios
       .delete('http://localhost:8082/api/books/'+id)
       .then(res => {
-        this.props.history.push("/");
+        history.push("/");
       })
       .catch(err => {
         console.log("Error form ShowBookDetails_deleteClick");
       })
   };
 
-
-  render() {
-
-    const book = this.state.book;
-    let BookItem = <div>
+  const BookItem = () => {
+    return (
       <table className="table table-hover table-dark">
-        {/* <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead> */}
         <tbody>
           <tr>
             <th scope="row">1</th>
@@ -84,52 +67,46 @@ class showBookDetails extends Component {
           </tr>
         </tbody>
       </table>
-    </div>
+    )
+  }
 
-    return (
-      <div className="ShowBookDetails">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-10 m-auto">
-              <br /> <br />
-              <Link to="/" className="btn btn-outline-warning float-left">
-                  Show Book List
-              </Link>
-            </div>
+  return (
+    <div className="ShowBookDetails">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-10 m-auto">
+            <br /> <br />
+            <Link to="/" className="btn btn-outline-warning float-left">
+                Show Book List
+            </Link>
+          </div>
+          <br />
+          <div className="col-md-8 m-auto">
+            <h1 className="display-4 text-center">Book's Record</h1>
+            <p className="lead text-center">
+                View Book's Info
+            </p>
+            <hr /> <br />
+          </div>
+        </div>
+
+        <BookItem />
+
+        <div className="row">
+          <div className="col-md-6">
+            <button type="button" className="btn btn-outline-danger btn-lg btn-block" onClick={ onDeleteClick.bind(book._id) }>Delete Book</button><br />
+          </div>
+
+          <div className="col-md-6">
+            <Link to={`/edit-book/${book._id}`} className="btn btn-outline-info btn-lg btn-block">
+                  Edit Book
+            </Link>
             <br />
-            <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Book's Record</h1>
-              <p className="lead text-center">
-                  View Book's Info
-              </p>
-              <hr /> <br />
-            </div>
           </div>
-          <div>
-            { BookItem }
-          </div>
-
-          <div className="row">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-outline-danger btn-lg btn-block" onClick={this.onDeleteClick.bind(this,book._id)}>Delete Book</button><br />
-            </div>
-
-            <div className="col-md-6">
-              <Link to={`/edit-book/${book._id}`} className="btn btn-outline-info btn-lg btn-block">
-                    Edit Book
-              </Link>
-              <br />
-            </div>
-
-          </div>
-            {/* <br />
-            <button type="button" class="btn btn-outline-info btn-lg btn-block">Edit Book</button>
-            <button type="button" class="btn btn-outline-danger btn-lg btn-block">Delete Book</button> */}
-
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-export default showBookDetails;
+export default ShowBookDetails;

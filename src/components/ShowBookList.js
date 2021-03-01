@@ -50,7 +50,7 @@ function ShowBookList() {
         </div>
 
         <div className="list">
-              {bookList}
+          {bookList}
         </div>
       </div>
     </div>
