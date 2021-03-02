@@ -127,7 +127,6 @@ function CreateBook() {
               </div>
 
               <input
-                  type="submit"
                   className="btn btn-outline-warning btn-block mt-4"
                   onClick={ onSubmit }
               />

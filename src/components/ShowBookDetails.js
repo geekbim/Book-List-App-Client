@@ -94,7 +94,7 @@ function ShowBookDetails(props) {
 
         <div className="row">
           <div className="col-md-6">
-            <button type="button" className="btn btn-outline-danger btn-lg btn-block" onClick={ onDeleteClick.bind(book._id) }>Delete Book</button><br />
+            <button className="btn btn-outline-danger btn-lg btn-block" onClick={ () => onDeleteClick(book._id) }>Delete Book</button><br />
           </div>
 
           <div className="col-md-6">
